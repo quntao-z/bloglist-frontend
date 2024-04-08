@@ -9,12 +9,6 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
-  // useEffect(() => {
-  //   blogService.getAll().then(blogs =>
-  //     setBlogs( blogs )
-  //   )  
-  // }, [])
-
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -23,7 +17,6 @@ const App = () => {
         username, password
       })
       setUser(user)
-      console.log(user)
       setUsername('')
       setPassword('')
     // } catch (exception) {
@@ -34,10 +27,8 @@ const App = () => {
     // }
   }
 
-  return (
-    <div>
-      <h2>blogs</h2>
-      <form onSubmit={handleLogin}>
+  const loginForm = () => (
+    <form onSubmit={handleLogin}>
         <div>
           username
           <input
@@ -58,6 +49,19 @@ const App = () => {
         </div>
         <button type="submit">login</button>
       </form>
+  )
+
+  const loadBlogs = () => {
+    blogService.getAll(user).then(blogs =>
+      setBlogs( blogs )
+    )
+  }
+
+  return (
+    <div>
+      <h2>blogs</h2>
+      {user === null && loginForm()}
+      {user !== null && loadBlogs()}
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
