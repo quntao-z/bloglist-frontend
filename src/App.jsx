@@ -9,6 +9,12 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
+  useEffect(() => {
+    if (user) {
+      loadBlogs()
+    }
+  }, [user])
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -16,6 +22,11 @@ const App = () => {
       const user = await loginService.login({
         username, password
       })
+
+      window.localStorage.setItem(
+        'loggedBlogAppUser', JSON.stringify(user)
+      )
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -52,16 +63,26 @@ const App = () => {
   )
 
   const loadBlogs = () => {
-    blogService.getAll(user).then(blogs =>
+    blogService.getAll().then(blogs =>
       setBlogs( blogs )
+    ).catch(error => {
+      console.error('Failed to load blogs: ', error)
+    })
+  }
+
+  if (user === null) {
+    return (
+      <div>
+        <h2>Log into application</h2>
+        {loginForm()}
+      </div>
     )
   }
 
   return (
     <div>
       <h2>blogs</h2>
-      {user === null && loginForm()}
-      {user !== null && loadBlogs()}
+      <p>{user.name} logged in</p>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
