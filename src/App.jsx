@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import "./App.css";
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -15,10 +19,20 @@ const App = () => {
     }
   }, [user])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser")
+
+    if(loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
-    // try {
+    try {
       const user = await loginService.login({
         username, password
       })
@@ -30,12 +44,14 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-    // } catch (exception) {
-    //   setErrorMessage('Wrong credentials')
-    //   setTimeout(() => {
-    //     setErrorMessage(null)
-    //   }, 5000)
-    // }
+    } catch (exception) {
+      setError(true)
+      setNotificationMessage('Wrong credentials')
+      setTimeout(() => {
+        setNotificationMessage(null)
+        setError(false)
+      }, 5000)
+    }
   }
 
   const loginForm = () => (
@@ -70,10 +86,16 @@ const App = () => {
     })
   }
 
+  const logOut = () => {
+    setUser(null)
+    window.localStorage.removeItem("loggedBlogAppUser")
+  }
+
   if (user === null) {
     return (
       <div>
         <h2>Log into application</h2>
+        <Notification message={notificationMessage} error={error} />
         {loginForm()}
       </div>
     )
@@ -83,6 +105,7 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <p>{user.name} logged in</p>
+      <button onClick={logOut}>Log Out</button>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
