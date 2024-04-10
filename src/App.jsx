@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import NoteForm from './components/NoteForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import "./App.css";
@@ -12,6 +13,9 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState("");
   const [error, setError] = useState(false);
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [url, setUrl] = useState('');
 
   useEffect(() => {
     if (user) {
@@ -48,7 +52,7 @@ const App = () => {
       setError(true)
       setNotificationMessage('Wrong credentials')
       setTimeout(() => {
-        setNotificationMessage(null)
+        setNotificationMessage('')
         setError(false)
       }, 5000)
     }
@@ -91,6 +95,32 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogAppUser")
   }
 
+  const handleNewTitle = (event) => {
+    setTitle(event.target.value)
+  }
+
+  const handleNewAuthor = (event) => {
+    setAuthor(event.target.value)
+  }
+
+  const handleNewUrl = (event) => {
+    setUrl(event.target.value)
+  }
+
+  const handleNewBlog = async (event) => {
+    event.preventDefault()
+
+    const blogObject = {
+      title: title,
+      author: author,
+      url: url
+    }
+
+    const response = await blogService.create(blogObject)
+    blogs.concat(response.data)
+    console.log(response)
+  }
+
   if (user === null) {
     return (
       <div>
@@ -106,6 +136,10 @@ const App = () => {
       <h2>blogs</h2>
       <p>{user.name} logged in</p>
       <button onClick={logOut}>Log Out</button>
+      <h2>Create new Blog</h2>
+      <NoteForm title={title} handleNewTitle={handleNewTitle} author={author} handleNewAuthor={handleNewAuthor}
+      url={url} handleNewUrl={handleNewUrl} handleNewBlog={handleNewBlog}
+      />
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
