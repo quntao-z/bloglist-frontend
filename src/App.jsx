@@ -49,12 +49,47 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setError(true)
-      setNotificationMessage('Wrong credentials')
-      setTimeout(() => {
-        setNotificationMessage('')
-        setError(false)
-      }, 5000)
+      renderNotificationMessage(true, 'Wrong credentials')
+    }
+  }
+
+  const renderNotificationMessage = (isError, errorMessage) => {
+    setError(isError)
+    setNotificationMessage(errorMessage)
+    setTimeout(() => {
+      setNotificationMessage('')
+    }, 5000)
+  }
+
+  const handleNewTitle = (event) => {
+    setTitle(event.target.value)
+  }
+
+  const handleNewAuthor = (event) => {
+    setAuthor(event.target.value)
+  }
+
+  const handleNewUrl = (event) => {
+    setUrl(event.target.value)
+  }
+
+  const handleNewBlog = async (event) => {
+    event.preventDefault()
+
+    try {
+      const blogObject = {
+        title: title,
+        author: author,
+        url: url
+      }
+      const response = await blogService.create(blogObject)
+      blogs.concat(response)
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      renderNotificationMessage(false, `A new blog was added: ${response.title} by ${response.author}`)
+    } catch (exception) {
+      renderNotificationMessage(true, "Blog was unable to be added")
     }
   }
 
@@ -93,32 +128,6 @@ const App = () => {
   const logOut = () => {
     setUser(null)
     window.localStorage.removeItem("loggedBlogAppUser")
-  }
-
-  const handleNewTitle = (event) => {
-    setTitle(event.target.value)
-  }
-
-  const handleNewAuthor = (event) => {
-    setAuthor(event.target.value)
-  }
-
-  const handleNewUrl = (event) => {
-    setUrl(event.target.value)
-  }
-
-  const handleNewBlog = async (event) => {
-    event.preventDefault()
-
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url
-    }
-
-    const response = await blogService.create(blogObject)
-    blogs.concat(response.data)
-    console.log(response)
   }
 
   if (user === null) {

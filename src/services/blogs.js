@@ -24,7 +24,7 @@ const create = async (blogObject) => {
       authorization: token,
     },
   })
-  return response
+  return response.data;
 }
 
 export default { setToken, getAll, create };
