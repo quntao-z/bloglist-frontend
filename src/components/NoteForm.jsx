@@ -1,6 +1,6 @@
-const NoteForm = ({title, handleNewTitle, author, handleNewAuthor, url, handleNewUrl, handleNewBlog}) => {
+const NoteForm = ({title, handleNewTitle, author, handleNewAuthor, url, handleNewUrl, handleNewBlog, renderNotificationMessage}) => {
     return (
-            <form onSubmit={handleNewBlog}>
+            <form onSubmit={(e) => handleNewBlog(e, renderNotificationMessage)}>
                 <div>
                     title:
                     <input value={title} onChange={(e) => handleNewTitle(e)}/>

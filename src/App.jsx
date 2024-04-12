@@ -73,7 +73,7 @@ const App = () => {
     setUrl(event.target.value)
   }
 
-  const handleNewBlog = async (event) => {
+  const handleNewBlog = async (event, renderNotificationMessage) => {
     event.preventDefault()
 
     try {
@@ -83,12 +83,13 @@ const App = () => {
         url: url
       }
       const response = await blogService.create(blogObject)
-      blogs.concat(response)
+      setBlogs(blogs.concat(response))
       setTitle('')
       setAuthor('')
       setUrl('')
       renderNotificationMessage(false, `A new blog was added: ${response.title} by ${response.author}`)
     } catch (exception) {
+      console.log(exception)
       renderNotificationMessage(true, "Blog was unable to be added")
     }
   }
@@ -143,11 +144,12 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={notificationMessage} error={error} />
       <p>{user.name} logged in</p>
       <button onClick={logOut}>Log Out</button>
       <h2>Create new Blog</h2>
       <NoteForm title={title} handleNewTitle={handleNewTitle} author={author} handleNewAuthor={handleNewAuthor}
-      url={url} handleNewUrl={handleNewUrl} handleNewBlog={handleNewBlog}
+      url={url} handleNewUrl={handleNewUrl} handleNewBlog={handleNewBlog} renderNotificationMessage={renderNotificationMessage}
       />
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
