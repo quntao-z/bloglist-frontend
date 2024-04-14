@@ -5,6 +5,7 @@ import NoteForm from './components/NoteForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import "./App.css";
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -13,9 +14,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState("");
   const [error, setError] = useState(false);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
+
 
   useEffect(() => {
     if (user) {
@@ -53,45 +52,23 @@ const App = () => {
     }
   }
 
+  const createNewBlog = async (blogObject) => {
+    try {
+      const response = await blogService.create(blogObject)
+      setBlogs(blogs.concat(response))
+      renderNotificationMessage(false, `A new blog was added: ${response.title} by ${response.author}`)
+    } catch (exception) {
+      console.log(exception)
+      renderNotificationMessage(true, "Blog was unable to be added")
+    }
+  }
+
   const renderNotificationMessage = (isError, errorMessage) => {
     setError(isError)
     setNotificationMessage(errorMessage)
     setTimeout(() => {
       setNotificationMessage('')
     }, 5000)
-  }
-
-  const handleNewTitle = (event) => {
-    setTitle(event.target.value)
-  }
-
-  const handleNewAuthor = (event) => {
-    setAuthor(event.target.value)
-  }
-
-  const handleNewUrl = (event) => {
-    setUrl(event.target.value)
-  }
-
-  const handleNewBlog = async (event, renderNotificationMessage) => {
-    event.preventDefault()
-
-    try {
-      const blogObject = {
-        title: title,
-        author: author,
-        url: url
-      }
-      const response = await blogService.create(blogObject)
-      setBlogs(blogs.concat(response))
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      renderNotificationMessage(false, `A new blog was added: ${response.title} by ${response.author}`)
-    } catch (exception) {
-      console.log(exception)
-      renderNotificationMessage(true, "Blog was unable to be added")
-    }
   }
 
   const loginForm = () => (
@@ -147,10 +124,9 @@ const App = () => {
       <Notification message={notificationMessage} error={error} />
       <p>{user.name} logged in</p>
       <button onClick={logOut}>Log Out</button>
-      <h2>Create new Blog</h2>
-      <NoteForm title={title} handleNewTitle={handleNewTitle} author={author} handleNewAuthor={handleNewAuthor}
-      url={url} handleNewUrl={handleNewUrl} handleNewBlog={handleNewBlog} renderNotificationMessage={renderNotificationMessage}
-      />
+      <Togglable buttonLabel='Create New blog'>
+        <NoteForm createNewBlog={createNewBlog}/>
+      </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
