@@ -17,4 +17,17 @@ border-radius: 5px;
 padding: 10px;
 margin-bottom: 10px;
 }
-  
+
+.button-container {
+    display: flex;
+    align-items: center;
+}
+
+.button-container p {
+    
+}
+
+.button-container button {
+    height: 22px;
+    margin-left: 10px;
+}
