@@ -18,7 +18,6 @@ axios.interceptors.request.use(config => {
 
 const getAll = async () => {
         const response = await axios.get(baseUrl)
-        console.log(token)
         return response.data
 }
 
@@ -29,8 +28,6 @@ const create = async (blogObject) => {
 
 const update = async (blogId, blogObject) => {
         const response = await axios.put(baseUrl + `/${blogId}`, blogObject)
-
-        console.log(response)
         return response.data
 }
 

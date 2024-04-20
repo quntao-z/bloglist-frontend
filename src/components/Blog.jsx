@@ -2,6 +2,8 @@ import { useState } from "react"
 import blogService from '../services/blogs'
 
 const Blog = ({ blog }) => {
+  const [likes, setLikes] = useState(blog.likes)
+
   const blogStyle = {
     paddingTop: 5,
     paddingLeft: 2,
@@ -20,16 +22,16 @@ const Blog = ({ blog }) => {
     return view ? "Hide" : "View"
   }
 
-  const likeButton = () => {
+  const handleLikeButton = async () => {
     const newBlogObject = {
       title: blog.title,
       author: blog.author,
       url: blog.url,
-      likes: blog.likes + 1
+      likes: likes + 1
     }
 
-    const response = blogService.update(blog.id, newBlogObject)
-    console.log(response)
+    const response = await blogService.update(blog.id, newBlogObject)
+    setLikes(response.likes)
   }
 
   return (
@@ -43,8 +45,8 @@ const Blog = ({ blog }) => {
         <div>
           <div>{blog.url}</div>
           <div>
-            Likes: {blog.likes}
-            <button onClick={likeButton}>like</button>
+            Likes: {likes}
+            <button onClick={handleLikeButton}>like</button>
           </div>
           <div>{blog.author}</div>
         </div>
