@@ -1,7 +1,7 @@
 import { useState } from "react"
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, loadBlog, username }) => {
   const [likes, setLikes] = useState(blog.likes)
 
   const blogStyle = {
@@ -34,6 +34,12 @@ const Blog = ({ blog }) => {
     setLikes(response.likes)
   }
 
+  const handleRemoveButton = async () => {
+    await blogService.remove(blog.id)
+    window.confirm(`Removing the blog ${blog.title} by ${blog.author}` )
+    loadBlog()
+  }
+
   return (
     <div style={blogStyle}>
       <div className='button-container'>
@@ -49,6 +55,7 @@ const Blog = ({ blog }) => {
             <button onClick={handleLikeButton}>like</button>
           </div>
           <div>{blog.author}</div>
+          {username === blog.user.username ? <button onClick={handleRemoveButton}>remove</button> : null}
         </div>
         : null
       }
