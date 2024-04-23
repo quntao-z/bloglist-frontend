@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 import blogService from '../services/blogs'
 
 const Blog = ({ blog, loadBlog, username }) => {
@@ -19,7 +19,7 @@ const Blog = ({ blog, loadBlog, username }) => {
   }
 
   const viewButtonLabel = () => {
-    return view ? "Hide" : "View"
+    return view ? 'Hide' : 'View'
   }
 
   const handleLikeButton = async () => {
@@ -32,6 +32,7 @@ const Blog = ({ blog, loadBlog, username }) => {
 
     const response = await blogService.update(blog.id, newBlogObject)
     setLikes(response.likes)
+    loadBlog()
   }
 
   const handleRemoveButton = async () => {
@@ -60,6 +61,6 @@ const Blog = ({ blog, loadBlog, username }) => {
         : null
       }
     </div>
-)}
+  )}
 
 export default Blog

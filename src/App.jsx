@@ -5,18 +5,17 @@ import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Togglable from './components/Togglable'
-import "./App.css";
+import './App.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notificationMessage, setNotificationMessage] = useState("");
-  const [error, setError] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('')
+  const [error, setError] = useState(false)
 
-  const blogFormRef = useRef();
-
+  const blogFormRef = useRef()
 
   useEffect(() => {
     if (user) {
@@ -25,7 +24,7 @@ const App = () => {
   }, [user])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser")
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
 
     if(loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
@@ -62,7 +61,7 @@ const App = () => {
       renderNotificationMessage(false, `A new blog was added: ${response.title} by ${response.author}`)
     } catch (exception) {
       console.log(exception)
-      renderNotificationMessage(true, "Blog was unable to be added")
+      renderNotificationMessage(true, 'Blog was unable to be added')
     }
   }
 
@@ -76,26 +75,26 @@ const App = () => {
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
-        <div>
+      <div>
           username
-          <input
+        <input
           type='text'
           value={username}
           name="Username"
           onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
+        />
+      </div>
+      <div>
           password
-          <input
+        <input
           type='password'
           value={password}
           name="Password"
           onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
+        />
+      </div>
+      <button type="submit">login</button>
+    </form>
   )
 
   const loadBlogs = () => {
@@ -108,7 +107,7 @@ const App = () => {
 
   const logOut = () => {
     setUser(null)
-    window.localStorage.removeItem("loggedBlogAppUser")
+    window.localStorage.removeItem('loggedBlogAppUser')
   }
 
   if (user === null) {
