@@ -50,8 +50,8 @@ const Blog = ({ blog, loadBlog, username }) => {
 
       { view ?
         <div>
-          <div>{blog.url}</div>
-          <div>
+          <div className='blog-url'>{blog.url}</div>
+          <div className='blog-likes'>
             Likes: {likes}
             <button onClick={handleLikeButton}>like</button>
           </div>
