@@ -110,6 +110,22 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
   }
 
+  const handleLikeButton = async (blog) => {
+    const newBlogObject = {
+      ...blog,
+      likes: blog.likes + 1
+    }
+
+    await blogService.update(blog.id, newBlogObject)
+    loadBlogs()
+  }
+
+  const handleRemoveButton = async (blog) => {
+    await blogService.remove(blog.id)
+    window.confirm(`Removing the blog ${blog.title} by ${blog.author}` )
+    loadBlogs()
+  }
+
   if (user === null) {
     return (
       <div>
@@ -132,7 +148,7 @@ const App = () => {
         <BlogForm createNewBlog={createNewBlog} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} loadBlog={loadBlogs} blog={blog} username={user.username} />
+        <Blog key={blog.id} blog={blog} username={user.username} handleLikeButton={handleLikeButton} handleRemoveButton={handleRemoveButton} />
       )}
     </div>
   )

@@ -62,26 +62,30 @@ test('view button click', async() => {
 })
 
 
-//testing an onClick function
-// test('blog like button', async () => {
-//   const blog = {
-//     _id: '5a422a851b54a676234d17f7',
-//     title: 'React patterns',
-//     author: 'Michael Chan',
-//     url: 'https://reactpatterns.com/',
-//     likes: 7,
-//     __v: 0,
-//     user: {
-//       username: 'ghopper'
-//     }
-//   }
+test('test blog like button', async () => {
+  const blog = {
+    _id: '5a422a851b54a676234d17f7',
+    title: 'React patterns',
+    author: 'Michael Chan',
+    url: 'https://reactpatterns.com/',
+    likes: 7,
+    __v: 0,
+    user: {
+      username: 'ghopper'
+    }
+  }
 
-//   render(<Blog blog={blog} />)
-//   const user = userEvent.setup()
+  const mockLikeButtonHandler = vi.fn()
 
-//   const viewButton = screen.getByText('View')
-//   await user.click(viewButton)
+  render(<Blog blog={blog} handleLikeButton={mockLikeButtonHandler} />)
+  const user = userEvent.setup()
 
-//   const likeButton = screen.getByText('like')
-//   await user.click(likeButton)
-// })
+  const viewButton = screen.getByText('View')
+  await user.click(viewButton)
+
+  const likeButton = screen.getByText('like')
+  await user.click(likeButton)
+  await user.click(likeButton)
+
+  expect(mockLikeButtonHandler.mock.calls).toHaveLength(2)
+})
