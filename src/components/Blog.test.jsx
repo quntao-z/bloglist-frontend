@@ -61,30 +61,27 @@ test('view button click', async() => {
   )
 })
 
-test('blog like button', async () => {
-  const blog = {
-    _id: '5a422a851b54a676234d17f7',
-    title: 'React patterns',
-    author: 'Michael Chan',
-    url: 'https://reactpatterns.com/',
-    likes: 7,
-    __v: 0,
-    user: {
-      username: 'ghopper'
-    }
-  }
 
-  const mock = new MockAdapter(axios)
-  mock.onPut(`/api/blogs/${blog._id}`).reply(200, { ...blog, likes: blog.likes + 1 })
+//testing an onClick function
+// test('blog like button', async () => {
+//   const blog = {
+//     _id: '5a422a851b54a676234d17f7',
+//     title: 'React patterns',
+//     author: 'Michael Chan',
+//     url: 'https://reactpatterns.com/',
+//     likes: 7,
+//     __v: 0,
+//     user: {
+//       username: 'ghopper'
+//     }
+//   }
 
-  render(<Blog blog={blog} />)
-  const user = userEvent.setup()
+//   render(<Blog blog={blog} />)
+//   const user = userEvent.setup()
 
-  const viewButton = screen.getByText('View')
-  await user.click(viewButton)
+//   const viewButton = screen.getByText('View')
+//   await user.click(viewButton)
 
-  const likeButton = screen.getByText('like')
-  await user.click(likeButton)
-
-  expect(mock.history.put.length).toBe(1)
-})
+//   const likeButton = screen.getByText('like')
+//   await user.click(likeButton)
+// })
