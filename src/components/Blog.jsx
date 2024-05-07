@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
 
 const Blog = ({ blog, username, handleLikeButton, handleRemoveButton }) => {
   const [likes, setLikes] = useState(blog.likes)
