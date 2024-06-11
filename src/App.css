@@ -1,29 +1,29 @@
 .error {
-color: red;
-background: lightgrey;
-font-size: 20px;
-border-style: solid;
-border-radius: 5px;
-padding: 10px;
-margin-bottom: 10px;
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
 }
-  
+
 .success {
-color: green;
-background: lightgrey;
-font-size: 20px;
-border-style: solid;
-border-radius: 5px;
-padding: 10px;
-margin-bottom: 10px;
+  color: green;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
 }
 
 .button-container {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .button-container button {
-    height: 22px;
-    margin-left: 10px;
+  height: 22px;
+  margin-left: 10px;
 }
