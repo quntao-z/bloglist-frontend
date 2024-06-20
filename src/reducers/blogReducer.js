@@ -4,10 +4,10 @@ import blogService from "../services/blogs";
 const initialState = []
 
 const blogSlice = createSlice({
-    name: "blog",
+    name: "blogs",
     initialState,
     reducers: {
-        setBlogs(action) {
+        setBlogs(state, action) {
             return action.payload
         },
         createBlog(state, action) {

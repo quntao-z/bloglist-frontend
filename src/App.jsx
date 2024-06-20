@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { initializeBlog } from "./reducers/blogReducer";
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import BlogForm from "./components/BlogForm";
@@ -7,19 +9,22 @@ import loginService from "./services/login";
 import Togglable from "./components/Togglable";
 import "./App.css";
 
+
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  let blogs = useSelector((state) => state.blogs);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [error, setError] = useState(false);
 
+  const dispatch = useDispatch()
+
   const blogFormRef = useRef();
 
   useEffect(() => {
     if (user) {
-      loadBlogs();
+      dispatch(initializeBlog());
     }
   }, [user]);
 
@@ -100,15 +105,6 @@ const App = () => {
       <button type="submit">login</button>
     </form>
   );
-
-  const loadBlogs = () => {
-    blogService
-      .getAll()
-      .then((blogs) => setBlogs(blogs))
-      .catch((error) => {
-        console.error("Failed to load blogs: ", error);
-      });
-  };
 
   const logOut = () => {
     setUser(null);
